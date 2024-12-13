@@ -72,23 +72,3 @@ func (u *Usecase) NonUserExistence(newUser newuser.User) (bool, error) {
 	}
 	return false, nil
 }
-
-/*
-func (u *Usecase) SetHelloMessage(msg string) error {
-	isExist, err := u.p.CheckHelloExitByMsg(msg)
-	if err != nil {
-		return err
-	}
-
-	if isExist {
-		return nil
-	}
-
-	err = u.p.InsertHello(msg)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-*/

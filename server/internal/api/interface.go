@@ -5,10 +5,6 @@ import (
 )
 
 type Usecase interface {
-	/*
-		FetchHelloMessage() (string, error)
-		SetHelloMessage(msg string) error
-	*/
 	PrintUserById(id int) (string, error)
 	PrintUserByEmail(email string) (string, error)
 	InsertNewUser(newUser newuser.User) error
