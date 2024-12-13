@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -9,21 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 	newuser "github.com/lzimin05/IDZ/internal/user"
 	"github.com/lzimin05/IDZ/pkg/vars"
-	"golang.org/x/crypto/bcrypt"
 )
-
-func hashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		return "", err
-	}
-	return string(bytes), nil
-}
-
-func checkPasswordHash(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
-}
 
 func (srv *Server) GetUserById(e echo.Context) error {
 	idparam, err := strconv.Atoi(e.Param("id"))
@@ -49,6 +36,40 @@ func (srv *Server) GetUserByEmail(e echo.Context) error {
 	return e.JSON(http.StatusOK, msg)
 }
 
+func (srv *Server) Login(e echo.Context) error {
+	input := struct {
+		Email    string `json:"email" validate:"required,email"`
+		Password string `json:"password" validate:"required"`
+	}{}
+	err := e.Bind(&input)
+	if err != nil {
+		return e.String(http.StatusInternalServerError, err.Error())
+	}
+	password, err := srv.uc.GetPasswordByEmail(input.Email)
+	if err != nil {
+		if errors.Is(err, vars.ErrAlreadyExist) {
+			return e.String(http.StatusConflict, err.Error())
+		}
+		return e.String(http.StatusInternalServerError, err.Error())
+	}
+	validate := validator.New()
+	err = validate.Struct(input)
+	if err != nil {
+		return e.String(http.StatusBadRequest, "почта указана неверно")
+	}
+	if password == "" {
+		fmt.Println("Пользователь еще не зарегестрирован!")
+		return e.String(http.StatusOK, "Пользователь еще не зарегестрирован!")
+	}
+	flag := newuser.CheckPasswordHash(input.Password, password)
+	if flag {
+		fmt.Println("совпал")
+	} else {
+		fmt.Println("не совпал пароль")
+	}
+	return e.JSON(http.StatusOK, flag)
+}
+
 func (srv *Server) PostNewUser(e echo.Context) error {
 	var NewUser newuser.User
 	err := e.Bind(&NewUser)
@@ -60,7 +81,7 @@ func (srv *Server) PostNewUser(e echo.Context) error {
 		return e.String(http.StatusBadRequest, "Длина от 5 до 30")
 	}
 
-	if len([]rune(NewUser.Name)) <= 5 {
+	if len([]rune(NewUser.Password)) <= 5 {
 		return e.String(http.StatusBadRequest, "Длина пароля должна быть больше 5 символов")
 	}
 	validate := validator.New()
@@ -68,7 +89,7 @@ func (srv *Server) PostNewUser(e echo.Context) error {
 	if err != nil {
 		return e.String(http.StatusBadRequest, "почта указана неверно")
 	}
-	hashedpassword, err := hashPassword(NewUser.Password)
+	hashedpassword, err := newuser.HashPassword(NewUser.Password)
 	if err != nil {
 		return e.String(http.StatusInternalServerError, "Ошибка хеширования пароля")
 	}

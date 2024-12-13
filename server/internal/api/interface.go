@@ -1,6 +1,8 @@
 package api
 
-import newuser "github.com/lzimin05/IDZ/internal/user"
+import (
+	newuser "github.com/lzimin05/IDZ/internal/user"
+)
 
 type Usecase interface {
 	/*
@@ -11,4 +13,5 @@ type Usecase interface {
 	PrintUserByEmail(email string) (string, error)
 	InsertNewUser(newUser newuser.User) error
 	NonUserExistence(newUser newuser.User) (bool, error)
+	GetPasswordByEmail(email string) (string, error)
 }

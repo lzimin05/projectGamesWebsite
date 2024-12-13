@@ -19,6 +19,18 @@ func (p *Provider) SelectUserById(id int) (string, error) {
 	return msg, nil
 }
 
+func (p *Provider) GetPasswordByEmail(email string) (string, error) {
+	var msg string
+	err := p.conn.QueryRow("SELECT password FROM users WHERE users.email = ($1)", email).Scan(&msg)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return "", nil
+		}
+		return "", err
+	}
+	return msg, nil
+}
+
 func (p *Provider) SelectUserByEmail(email string) (string, error) {
 	var msg string
 

@@ -32,6 +32,19 @@ func (u *Usecase) PrintUserByEmail(email string) (string, error) {
 	return msg, nil
 }
 
+func (u *Usecase) GetPasswordByEmail(email string) (string, error) {
+	msg, err := u.p.GetPasswordByEmail(email)
+	if err != nil {
+		return "", err
+	}
+
+	if msg == "" {
+		return "", nil
+	}
+
+	return msg, nil
+}
+
 func (u *Usecase) InsertNewUser(newUser newuser.User) error {
 	flag, err := u.NonUserExistence(newUser)
 	if err != nil {
