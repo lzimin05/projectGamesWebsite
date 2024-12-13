@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Иконка-->
+    <link rel="icon" href="image/icon2.png" type="image/x-png">
+    <!--Подключаем стили-->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kablammo&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&family=Tiny5&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&family=Pattaya&family=Rampart+One&family=Tiny5&display=swap" rel="stylesheet">
+
+    <title>Игры</title>
+</head>
+<body>
+    <header>
+        <!--Левые кнопки меню-->
+        <div class="left_menu">
+            <button onclick="document.location='main.html'" class="menu">Все игры</button>
+            <button class="menu">Рекорды</button>
+        </div>
+        <div class="center_menu" action="/search" method="get">
+            <img class="img_center_menu"src="image/search.png">
+            <input id="search_label" type="text" class="center_menu_search_label">
+            <button class="center_menu_cansel button_hide">x</button>
+            <button id="search_button" class="center_menu_search_button button_hide" type="submit">Поиск</button>
+        </div>
+        <div class="dark_mode_div">
+            <button class="menu">Профиль</button>
+            <button id="dark_mode_button" class="dark_mode_button"><img class="img_dark_mode" src="image/theme.png" alt="change_theme"></button>
+        </div>
+    </header>
+    <section class="info_bar button_hide zero_params">
+        <p>По вашему запросу ничего не найдено</p>
+        <p>Вы можете поиграть в другие наши игры:</p>
+    </section>
+    <section class="page_content">
+        <div class="game_card" data-value="змейка">
+            <a class="game_card_link" href="snake.html"><img class="img_game_card" src="image/snake.png" alt="snake">
+            <p class="game_card_title1">Змейка</p></a>
+        </div>
+        <div class="game_card" data-value="сокобан">
+            <a class="game_card_link" href="sokoban.html"><img class="img_game_card" src="image/sokoban.png" alt="snake">
+            <p class="game_card_title2">Сокобан</p></a>
+        </div>
+        <div class="game_card" data-value="ну, погоди!">
+            <a class="game_card_link" href="wolf.html"><img class="img_game_card" src="image/wolf.png" alt="snake">
+            <p class="game_card_title3">Ну, погоди!</p></a>
+        </div>
+        <div class="game_card" data-value="трафик райдер 3D">
+            <a class="game_card_link" href="traffic.html"><img class="img_game_card" src="image/trafic.png" alt="snake">
+            <p class="game_card_title4">трафик райдер 3D</p></a>
+        </div>
+    </section>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    font-size: 16px;
+}
+
+header {
+    display: flex;
+    justify-content:space-between;
+    width: 100%;
+    height: 7vh;
+    border-bottom: solid 2px gray;
+    background-color: gray;
+}
+
+.left_menu {
+    margin-top: auto;
+    margin-bottom: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 30vw;
+    height: 7vh;
+}
+
+button.menu, button.selected {
+    padding: 5px 10px 5px 10px;
+    margin: 5px 20px 5px 10px;
+    border-radius: 17px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+button.selected {
+    background-color: blue;
+    color: white;
+}
+
+button.menu:hover {
+    cursor: pointer;
+    background-color: rgb(202, 201, 201);
+}
+
+button.selected:hover {
+    background-color: blue;
+}
+
+.menu {
+    height: 4.5vh;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 2vh;
+}
+
+.center_menu {
+    margin-top: auto;
+    margin-bottom: auto;
+    align-items: center;
+    height: 5vh;
+    width: 40vw;
+    border-radius: 30px;
+    background-color: rgb(199, 198, 198);
+    border: solid 2px black;
+    display: flex;
+    flex-direction: row;
+}
+
+.img_center_menu {
+    padding: 0.5vh 10px 0.5vh 10px;
+    height: 4vh;
+}
+
+.center_menu_search_label {
+    margin-left: 5px;
+    width: 30vw;
+    background-color:  rgb(199, 198, 198);
+    border:  none;
+    box-shadow: none; 
+    outline: none;
+    font-size: 3vh;
+}
+
+.center_menu_search_button {
+    border: none;
+    background-color: orange;
+    border-radius: 0px 30px 30px 0px;
+    font-size: 16px;
+    margin-left: auto;
+    width: 10vh;
+    height: 5vh;
+}
+
+.button_hide {
+    visibility: hidden;
+}
+
+.center_menu_search_button:hover {
+    cursor: pointer;
+}
+
+.center_menu_search_button:active {
+    background-color: rgb(252, 184, 59);
+}
+
+.center_menu_cansel {
+    margin-right: 10px;
+    height: 40px;
+    width: 40px;
+    background-color: rgb(199, 198, 198);
+    border: none;
+    color: rgb(128, 128, 128);
+    font-size: 3vh;
+    position: relative;
+    bottom: 2px;
+}
+
+.center_menu_cansel:hover {
+    cursor: pointer;
+}
+
+.light_mode {
+    background-color: white;
+    color: black;
+}
+
+.dark_mode {
+    background-color: rgb(77, 77, 77);
+    color: white;
+}
+
+.dark_mode_div {
+    margin-top: auto;
+    margin-bottom: auto;
+    align-items: center;
+    display: flex;
+    justify-content: end;
+    width: 30vw;
+    height: 7vh;
+}
+
+.img_dark_mode {
+    position: relative;
+    padding-top: auto;
+    padding-bottom: auto;
+    height: 50px;
+    width: 50px;
+}
+
+.dark_mode_button {
+    margin-right: 20px;
+    height: 60px;
+    width: 60px;
+    border: none;
+    background: none;
+    overflow-x:hidden;
+}
+
+.dark_mode_button:hover {
+    transition: 0.5s;
+    transform: rotate(90deg);
+    cursor: pointer;
+    overflow-x:hidden;
+}
+
+.dark_mode_button:active {
+    transition: 0.5s;
+    transform: rotate(-90deg);
+    overflow-x:hidden;
+}
+
+.dark_mode, .light_mode {
+    transition: color 1.5s ease-in, background-color 2s ease-in-out;
+}
+
+.page_content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding-left: 40px;
+    padding-top: 80px;
+    padding-right: 40px;
+}
+
+.game_card {
+    margin: 20px 20px 20px 20px;
+    font-size: 3vh;
+    text-align: center;
+    border-radius: 20px;
+    width: 350px;
+    box-shadow: 10px 10px 5px gray;
+    font-family: "Kablammo", system-ui;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    border: solid 3px black;
+}
+
+.game_card:hover {
+    transition: 0.5s;
+    transform: translate(0px, -20px);
+}
+
+.img_game_card {
+    width: 350px;
+    border-radius: 20px 20px 0px 0px;
+}
+
+.game_card_link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.zero_params {
+    position: absolute;
+    max-width: 0px;
+    max-height: 0px;
+}
+
+.info_bar {
+    position: relative;
+    left: 50vw;
+    transform: translate(-50%, 0px);
+    text-align: center;
+    white-space: nowrap;
+    font-size: 3vh;
+    font-family: "LXGW WenKai TC", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.game_card_title2 {
+    text-transform: uppercase;
+    font-family: "Tiny5", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.game_card_title3 {
+    font-family: "Pattaya", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.game_card_title4 {
+    text-transform: uppercase;
+    font-family: "Tiny5", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}

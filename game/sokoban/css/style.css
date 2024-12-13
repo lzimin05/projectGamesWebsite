@@ -1,0 +1,40 @@
+.just_game {
+    margin-top: 5vh;
+    display: flex;
+    justify-content: center;
+}
+
+.levels_for_game {
+    font-size: 20px;
+    position: absolute;
+    right: 1%;
+    top: 9vh;
+    width: 70px;
+    border: solid 2px black;
+    background-color: gold;
+    color: blue;
+}
+
+.levels_for_game:active {
+    scale: 0.8;
+}
+
+.all_levels {
+    margin-top: 10px;
+    position: absolute;
+    right: 0;
+    padding-right: 10px;
+    color: yellow;
+}
+
+.spec_style {
+    border: solid 2px black;
+    width: 30px;
+    height: 30px;
+    margin: 5px 5px 5px 5px;
+    font-size: 20px;
+}
+
+.spec_style:active {
+    scale: 0.8;
+}
