@@ -5,9 +5,9 @@
 <style>
 body { font-family: sans-serif; }
 form { display: flex; flex-direction: column; width: 300px; margin: 0 auto; }
-label { margin-bottom: 5px; }
+label { margin-bottom: 10px; }
 input { margin-bottom: 10px; padding: 8px; border: 1px solid #ccc; }
-button { padding: 8px 15px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+button { margin-top: 10px;padding: 8px 15px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
 .error { color: red; }
 </style>
 </head>
@@ -22,7 +22,9 @@ button { padding: 8px 15px; background-color: #4CAF50; color: white; border: non
     <label for="password">Пароль:</label>
     <input type="password" id="password" name="Password" required>
     <button type="submit">Зарегистрироваться</button>
-    <div id="error-message" class="error"></div> </form>
+    <div id="error-message" class="error"></div>
+    <button id="reg">Войти</button>
+</form>
 
 <script src="script.js"></script> </body>
 </html>

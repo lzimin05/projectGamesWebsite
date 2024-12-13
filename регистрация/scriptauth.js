@@ -1,21 +1,23 @@
+var flag = false //зашел ли пользователь
+
 document.getElementById('reg').addEventListener('click', function(event) {
-    window.location.href = 'auth.html';
+    window.location.href = 'title.html';
 })
 
-document.getElementById('registrationForm').addEventListener('submit', function(event) {
+document.getElementById('form').addEventListener('submit', function(event) {
     event.preventDefault();
     const form = this; // 'this' refers to the form element
-
+    var email = document.getElementById('email')
+    var password = document.getElementById('password')
     // More robust way to get form data, handles potential missing fields gracefully
     const formData = {
-        name: form.name.value || "",
-        email: form.email.value || "",
-        password: form.password.value || ""
+        email: email.value || "",
+        password: password.value || ""
     };
 
     console.log(formData); // Log formData, not FormData
 
-    fetch('http://localhost:8081/newuser', {
+    fetch('http://localhost:8081/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -45,12 +47,22 @@ document.getElementById('registrationForm').addEventListener('submit', function(
         return response.json();
     })
     .then(data => {
+        if (data === true) {
+            flag = true
+            //зашел!!!
+            window.location.href = '../main.html';
+
+        } 
         document.getElementById('error-message').textContent = "Регистрация успешна!";
         // Redirect after successful registration
         // window.location.href = '/success'; 
     })
     .catch(error => {
-        console.error('Ошибка регистрации:', error);
+        document.getElementById('err').textContent = 'ошибка входа';
+        console.error('Ошибка авторизации:', error);
     });
 });
+
+
+
 

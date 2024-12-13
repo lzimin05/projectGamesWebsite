@@ -59,7 +59,7 @@ func (srv *Server) Login(e echo.Context) error {
 	}
 	if password == "" {
 		fmt.Println("Пользователь еще не зарегестрирован!")
-		return e.String(http.StatusOK, "Пользователь еще не зарегестрирован!")
+		return e.String(http.StatusBadRequest, "Пользователь еще не зарегестрирован!")
 	}
 	flag := newuser.CheckPasswordHash(input.Password, password)
 	if flag {

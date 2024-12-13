@@ -8,20 +8,22 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="form">
     <h2>Авторизация</h2>
     <form action="login.php" method="POST">
         <div class="input-group">
-            <label for="username">Логин:</label>
-            <input type="text" id="username" name="username" required>
+            <label for="email">Почта:</label>
+            <input type="text" id="email" name="email" required>
         </div>
         <div class="input-group">
             <label for="password">Пароль:</label>
             <input type="password" id="password" name="password" required>
         </div>
+        <p id="err" color="red"><p>
         <button type="submit">Войти</button>
+        <button id="reg">Регистрация</button>
     </form>
 </div>
-
+<script src="scriptauth.js"></script>
 </body>
 </html>
