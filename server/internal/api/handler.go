@@ -9,7 +9,21 @@ import (
 	"github.com/labstack/echo/v4"
 	newuser "github.com/lzimin05/IDZ/internal/user"
 	"github.com/lzimin05/IDZ/pkg/vars"
+	"golang.org/x/crypto/bcrypt"
 )
+
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+	return string(bytes), nil
+}
+
+func checkPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
+}
 
 func (srv *Server) GetUserById(e echo.Context) error {
 	idparam, err := strconv.Atoi(e.Param("id"))
@@ -54,6 +68,11 @@ func (srv *Server) PostNewUser(e echo.Context) error {
 	if err != nil {
 		return e.String(http.StatusBadRequest, "почта указана неверно")
 	}
+	hashedpassword, err := hashPassword(NewUser.Password)
+	if err != nil {
+		return e.String(http.StatusInternalServerError, "Ошибка хеширования пароля")
+	}
+	NewUser.Password = hashedpassword
 	err = srv.uc.InsertNewUser(NewUser)
 	if err != nil {
 		if errors.Is(err, vars.ErrAlreadyExist) {
