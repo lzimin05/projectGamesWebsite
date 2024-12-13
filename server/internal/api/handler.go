@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
 	newuser "github.com/lzimin05/IDZ/internal/user"
 	"github.com/lzimin05/IDZ/pkg/vars"
@@ -47,6 +48,11 @@ func (srv *Server) PostNewUser(e echo.Context) error {
 
 	if len([]rune(NewUser.Name)) <= 5 {
 		return e.String(http.StatusBadRequest, "Длина пароля должна быть больше 5 символов")
+	}
+	validate := validator.New()
+	err = validate.Struct(NewUser)
+	if err != nil {
+		return e.String(http.StatusBadRequest, "почта указана неверно")
 	}
 	err = srv.uc.InsertNewUser(NewUser)
 	if err != nil {
