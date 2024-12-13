@@ -1,4 +1,4 @@
-module github.com/ValeryBMSTU/web-10
+module github.com/lzimin05/IDZ
 
 go 1.22.1
 

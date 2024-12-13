@@ -4,16 +4,16 @@ import (
 	"flag"
 	"log"
 
-	"github.com/ValeryBMSTU/web-10/internal/api"
-	"github.com/ValeryBMSTU/web-10/internal/config"
-	"github.com/ValeryBMSTU/web-10/internal/provider"
-	"github.com/ValeryBMSTU/web-10/internal/usecase"
 	_ "github.com/lib/pq"
+	"github.com/lzimin05/IDZ/internal/api"
+	"github.com/lzimin05/IDZ/internal/config"
+	"github.com/lzimin05/IDZ/internal/provider"
+	"github.com/lzimin05/IDZ/internal/usecase"
 )
 
 func main() {
 	// Считываем аргументы командной строки
-	configPath := flag.String("config-path", "./configs/hello_example.yaml", "путь к файлу конфигурации")
+	configPath := flag.String("config-path", "./configs/IDZ.yaml", "путь к файлу конфигурации")
 	flag.Parse()
 
 	cfg, err := config.LoadConfig(*configPath)
