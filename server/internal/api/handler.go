@@ -11,12 +11,11 @@ import (
 )
 
 func (srv *Server) GetUserById(e echo.Context) error {
-	input := e.FormValue("id")
-	number, err := strconv.Atoi(input)
+	idparam, err := strconv.Atoi(e.Param("id"))
 	if err != nil {
-		return e.String(http.StatusBadRequest, "enter number!")
+		return e.String(http.StatusBadRequest, "invalid id")
 	}
-	msg, err := srv.uc.PrintUserById(number)
+	msg, err := srv.uc.PrintUserById(idparam)
 	if err != nil {
 		return e.String(http.StatusInternalServerError, err.Error())
 	}
