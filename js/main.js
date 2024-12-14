@@ -13,6 +13,13 @@ for(let i = 0; i < button_selected.length; i++) {
         }   
     });
 }
+
+let button_menu = document.getElementById('menu')
+button_menu.addEventListener("click", function(event) {
+    window.location.href = '../registration/auth.html';
+    console.log("click menu!")
+})
+
 //Обработка кнопки смены темы (светлая или темная)
 let button_theme = document.querySelector('.dark_mode_button');
 document.body.className += 'light_mode';

@@ -12,6 +12,8 @@ import (
 	"github.com/lzimin05/IDZ/pkg/vars"
 )
 
+var ID int
+
 func (srv *Server) GetUserById(e echo.Context) error {
 	idparam, err := strconv.Atoi(e.Param("id"))
 	if err != nil {
@@ -67,6 +69,7 @@ func (srv *Server) Login(e echo.Context) error {
 	} else {
 		fmt.Println("не совпал пароль")
 	}
+	ID = 
 	return e.JSON(http.StatusOK, flag)
 }
 
@@ -77,7 +80,7 @@ func (srv *Server) PostNewUser(e echo.Context) error {
 		return e.String(http.StatusInternalServerError, err.Error())
 	}
 
-	if len([]rune(NewUser.Name)) > 30 || len([]rune(NewUser.Name)) < 5 {
+	if len([]rune(NewUser.Name)) > 30 || len([]rune(NewUser.Name)) < 2 {
 		return e.String(http.StatusBadRequest, "Длина от 5 до 30")
 	}
 
