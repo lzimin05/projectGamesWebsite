@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"fmt"
 	"log"
 
 	newuser "github.com/lzimin05/IDZ/internal/user"
@@ -43,6 +44,18 @@ func (u *Usecase) GetPasswordByEmail(email string) (string, error) {
 	}
 
 	return msg, nil
+}
+
+func (u *Usecase) GetIdByemail(email string) (int, error) {
+	num, err := u.p.GetIdByemail(email)
+	if err != nil {
+		return 0, err
+	}
+	if num == 0 {
+		fmt.Println("Нет Id")
+		return 0, nil
+	}
+	return num, nil
 }
 
 func (u *Usecase) InsertNewUser(newUser newuser.User) error {

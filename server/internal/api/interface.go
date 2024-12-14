@@ -10,4 +10,5 @@ type Usecase interface {
 	InsertNewUser(newUser newuser.User) error
 	NonUserExistence(newUser newuser.User) (bool, error)
 	GetPasswordByEmail(email string) (string, error)
+	GetIdByemail(email string) (int, error)
 }

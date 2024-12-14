@@ -13,12 +13,51 @@ for(let i = 0; i < button_selected.length; i++) {
         }   
     });
 }
+const token1 = localStorage.getItem('jwtToken');
+console.log(token1)
+if (token1 == null) {
+    window.location.href = '../registration/auth.html';
+}
 
 let button_menu = document.getElementById('menu')
 button_menu.addEventListener("click", function(event) {
-    window.location.href = '../registration/auth.html';
-    console.log("click menu!")
-})
+    // Получаем токен из локального хранилища
+    const token = localStorage.getItem('jwtToken');
+    // Проверяем, есть ли токен
+    if (token) {
+        // Отправляем POST-запрос на /logout
+        fetch('http://localhost:8081/logout', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`, // Добавляем токен в заголовок
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Ошибка выхода: ${response.status} ${response.statusText}`);
+            }
+            return response.json(); // Если запрос успешен, возвращаем данные
+        })
+        .then(data => {
+            console.log('Выход выполнен успешно:', data);
+        })
+        .catch(error => {
+            console.error('Ошибка выхода:', error.message);
+        })
+        .finally(() => {
+            // Удаляем токен из локального хранилища
+            localStorage.removeItem('jwtToken');
+
+            // Перенаправляем пользователя на страницу входа
+            window.location.href = '../registration/auth.html';
+            console.log("click menu!");
+        });
+    } else {
+        // Если токена нет, просто перенаправляем на страницу входа
+        window.location.href = '../registration/auth.html';
+        console.log("click menu!");
+    }
+});
 
 //Обработка кнопки смены темы (светлая или темная)
 let button_theme = document.querySelector('.dark_mode_button');

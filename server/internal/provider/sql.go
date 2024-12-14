@@ -3,6 +3,7 @@ package provider
 import (
 	"database/sql"
 	"errors"
+	"strconv"
 
 	newuser "github.com/lzimin05/IDZ/internal/user"
 )
@@ -50,4 +51,29 @@ func (p *Provider) InsertUser(newUser newuser.User) error {
 		return err
 	}
 	return nil
+}
+
+// надо прололжить!	
+func (p *Provider) GetSesion(id int) error {
+	_, err := p.conn.Exec("UPDATE sesion SET id_user = ($1)", id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *Provider) GetIdByemail(email string) (int, error) {
+	var msg string
+	err := p.conn.QueryRow("SELECT id FROM users WHERE users.email = ($1)", email).Scan(&msg)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return 0, nil
+		}
+		return 0, err
+	}
+	number, err := strconv.Atoi(msg)
+	if err != nil {
+		return 0, nil
+	}
+	return number, nil
 }
