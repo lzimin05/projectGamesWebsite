@@ -3,10 +3,10 @@ package api
 import (
 	"errors"
 	"fmt"
-
 	"net/http"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/go-playground/validator"
@@ -15,8 +15,6 @@ import (
 	newuser "github.com/lzimin05/IDZ/internal/user"
 	"github.com/lzimin05/IDZ/pkg/vars"
 )
-
-var ID int = 0
 
 func (srv *Server) GetUserById(e echo.Context) error {
 	idparam, err := strconv.Atoi(e.Param("id"))
@@ -87,7 +85,7 @@ func (srv *Server) Login(e echo.Context) error {
 	claims := &jwtCustomClaims{
 		Email: input.Email,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)), // Срок действия токена - 24 часа
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)), //время жизни токена
 		},
 	}
 
@@ -98,7 +96,8 @@ func (srv *Server) Login(e echo.Context) error {
 	if err != nil {
 		return e.String(http.StatusInternalServerError, "Не удалось создать токен")
 	}
-	//добавить сесию!!!
+
+	// Добавляем сессию
 	id, err := srv.uc.GetIdByemail(input.Email)
 	if err != nil {
 		return e.String(http.StatusInternalServerError, err.Error())
@@ -107,6 +106,7 @@ func (srv *Server) Login(e echo.Context) error {
 	if err != nil {
 		return e.String(http.StatusInternalServerError, err.Error())
 	}
+
 	// Возвращаем токен в ответе
 	return e.JSON(http.StatusOK, map[string]string{
 		"token": tokenString,
@@ -137,7 +137,7 @@ func (srv *Server) PostNewUser(e echo.Context) error {
 		return e.String(http.StatusBadRequest, "почта указана неверно")
 	}
 	if id != 0 {
-		return e.String(http.StatusNoContent, "уже зарегестрирован!")
+		return e.String(http.StatusNoContent, "уже зарегистрирован!")
 	}
 	hashedpassword, err := newuser.HashPassword(NewUser.Password)
 	if err != nil {
@@ -166,12 +166,20 @@ func (srv *Server) Logout(c echo.Context) error {
 	revokedTokens.Lock()
 	revokedTokens.tokens[tokenString] = true
 	revokedTokens.Unlock()
+
+	// Обновляем сессию на id = 0
 	err := srv.uc.UpdateSesionNow(0)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
+
 	return c.String(http.StatusOK, "Logged out successfully")
 }
+
+var revokedTokens = struct {
+	sync.RWMutex
+	tokens map[string]bool
+}{tokens: make(map[string]bool)}
 
 func (srv *Server) GetSesion(e echo.Context) error {
 	id, err := srv.uc.GetSesionNow()
@@ -213,4 +221,53 @@ func (srv *Server) UpdateUserById(e echo.Context) error {
 		return e.String(http.StatusInternalServerError, err.Error())
 	}
 	return e.String(http.StatusOK, "OK")
+}
+
+func (srv *Server) AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		authHeader := c.Request().Header.Get("Authorization")
+		if authHeader == "" {
+			return c.Redirect(http.StatusTemporaryRedirect, "/login")
+		}
+
+		tokenString := strings.Replace(authHeader, "Bearer ", "", 1)
+
+		// Проверяем, находится ли токен в черном списке
+		revokedTokens.RLock()
+		if revokedTokens.tokens[tokenString] {
+			_ = srv.uc.UpdateSesionNow(0)
+			revokedTokens.RUnlock()
+			return c.String(http.StatusUnauthorized, "Unauthorized: Token revoked")
+		}
+		revokedTokens.RUnlock()
+
+		token, err := jwt.ParseWithClaims(tokenString, &jwtCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			}
+			return jwtSecret, nil
+		})
+
+		// Если токен истек или недействителен, обновляем сессию на id = 0
+		if err != nil {
+			// Проверяем, является ли ошибка истечением токена
+			if errors.Is(err, jwt.ErrTokenExpired) {
+				fmt.Println("Token expired") // Логирование
+				err := srv.uc.UpdateSesionNow(0)
+				if err != nil {
+					return c.String(http.StatusInternalServerError, err.Error())
+				}
+				return c.Redirect(http.StatusTemporaryRedirect, "/login")
+			}
+			// Если ошибка другая, просто перенаправляем на страницу входа
+			return c.Redirect(http.StatusTemporaryRedirect, "/login")
+		}
+
+		if claims, ok := token.Claims.(*jwtCustomClaims); ok && token.Valid {
+			c.Set("email", claims.Email)
+			return next(c)
+		}
+
+		return c.Redirect(http.StatusTemporaryRedirect, "/login")
+	}
 }

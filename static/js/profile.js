@@ -27,6 +27,7 @@ async function getSessionId() {
             return sessionId;
         } else {
             console.error('Failed to fetch session ID:', response.statusText);
+            window.location.href = '../registration/auth.html';
             return null;
         }
     } catch (error) {
