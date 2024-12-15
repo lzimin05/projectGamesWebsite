@@ -30,6 +30,18 @@ func (srv *Server) GetUserById(e echo.Context) error {
 	return e.JSON(http.StatusOK, msg)
 }
 
+func (srv *Server) GetEmailById(e echo.Context) error {
+	idparam, err := strconv.Atoi(e.Param("id"))
+	if err != nil {
+		return e.String(http.StatusBadRequest, "invalid id")
+	}
+	msg, err := srv.uc.PrintEmailById(idparam)
+	if err != nil {
+		return e.String(http.StatusInternalServerError, err.Error())
+	}
+	return e.JSON(http.StatusOK, msg)
+}
+
 func (srv *Server) GetUserByEmail(e echo.Context) error {
 	user := e.Get("user").(*jwt.Token)
 	claims := user.Claims.(*jwtCustomClaims)
@@ -86,7 +98,15 @@ func (srv *Server) Login(e echo.Context) error {
 	if err != nil {
 		return e.String(http.StatusInternalServerError, "Не удалось создать токен")
 	}
-
+	//добавить сесию!!!
+	id, err := srv.uc.GetIdByemail(input.Email)
+	if err != nil {
+		return e.String(http.StatusInternalServerError, err.Error())
+	}
+	err = srv.uc.UpdateSesionNow(id)
+	if err != nil {
+		return e.String(http.StatusInternalServerError, err.Error())
+	}
 	// Возвращаем токен в ответе
 	return e.JSON(http.StatusOK, map[string]string{
 		"token": tokenString,
@@ -146,6 +166,51 @@ func (srv *Server) Logout(c echo.Context) error {
 	revokedTokens.Lock()
 	revokedTokens.tokens[tokenString] = true
 	revokedTokens.Unlock()
-
+	err := srv.uc.UpdateSesionNow(0)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
 	return c.String(http.StatusOK, "Logged out successfully")
+}
+
+func (srv *Server) GetSesion(e echo.Context) error {
+	id, err := srv.uc.GetSesionNow()
+	if err != nil {
+		return e.String(http.StatusInternalServerError, err.Error())
+	}
+	return e.String(http.StatusOK, strconv.Itoa(id))
+}
+
+func (srv *Server) UpdateUserById(e echo.Context) error {
+	idparam, err := strconv.Atoi(e.Param("id"))
+	if err != nil {
+		return e.String(http.StatusInternalServerError, "invalid id")
+	}
+	idsesion, err := srv.uc.GetSesionNow()
+	if err != nil {
+		return e.String(http.StatusInternalServerError, "invalid id")
+	}
+	if idparam != idsesion {
+		return e.String(http.StatusForbidden, "error access denied")
+	}
+	newname := struct {
+		Newname string `json:"newname" validate:"required"`
+	}{}
+	err = e.Bind(&newname)
+	if err != nil {
+		return e.String(http.StatusInternalServerError, err.Error())
+	}
+	if len([]rune(newname.Newname)) > 30 || len([]rune(newname.Newname)) < 5 {
+		return e.String(http.StatusBadRequest, "Длина от 5 до 30")
+	}
+	validate := validator.New()
+	err = validate.Struct(newname)
+	if err != nil {
+		return e.String(http.StatusBadRequest, "обновленное имя пользователя указано неверно")
+	}
+	err = srv.uc.UpdateUserById(newname.Newname, idparam)
+	if err != nil {
+		return e.String(http.StatusInternalServerError, err.Error())
+	}
+	return e.String(http.StatusOK, "OK")
 }

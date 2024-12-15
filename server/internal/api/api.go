@@ -42,8 +42,8 @@ func NewServer(ip string, port int, maxSize int, uc Usecase) *Server {
 
 	// Настройка CORS для всего сервера
 	api.server.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"*"}, // Разрешаем запросы со всех источников (для разработки)
-		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodOptions},
+		AllowOrigins: []string{"*"},                                                                                    // Разрешаем запросы со всех источников (для разработки)
+		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodOptions},                    // Добавляем PUT
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization}, // Добавляем Authorization
 	}))
 
@@ -65,8 +65,11 @@ func NewServer(ip string, port int, maxSize int, uc Usecase) *Server {
 
 	// Защищенные маршруты
 	r.GET("/user/:email", api.GetUserByEmail)
+	r.GET("/email/:id", api.GetEmailById)
 	r.GET("/main", api.Access)
 	r.GET("/:id", api.GetUserById)
+	r.GET("/sesion", api.GetSesion)
+	r.PUT("/user/:id", api.UpdateUserById)
 
 	// Маршрут для страницы входа
 	api.server.GET("/login", func(c echo.Context) error {

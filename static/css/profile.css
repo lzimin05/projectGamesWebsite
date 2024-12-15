@@ -1,0 +1,85 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: #ffffff;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    text-align: center;
+}
+
+.header {
+    margin-bottom: 30px;
+    text-align: center; /* Центрируем кнопку */
+}
+
+.profile h1 {
+    font-size: 28px;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.user-info {
+    margin-bottom: 30px;
+}
+
+#username-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+#username {
+    font-size: 22px;
+    font-weight: bold;
+    color: #555;
+}
+
+.button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+#logout-button {
+    background-color: #dc3545;
+}
+
+#logout-button:hover {
+    background-color: #a71d2a;
+}
+
+#back-button {
+    background-color: #6c757d;
+}
+
+#back-button:hover {
+    background-color: #545b62;
+}
+
+p {
+    font-size: 18px;
+    color: #777;
+    margin: 0;
+}

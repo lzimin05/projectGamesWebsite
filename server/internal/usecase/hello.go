@@ -20,6 +20,19 @@ func (u *Usecase) PrintUserById(id int) (string, error) {
 	return msg, nil
 }
 
+func (u *Usecase) PrintEmailById(id int) (string, error) {
+	msg, err := u.p.SelectEmailById(id)
+	if err != nil {
+		return "", err
+	}
+
+	if msg == "" {
+		return u.defaultMsg, nil
+	}
+
+	return msg, nil
+}
+
 func (u *Usecase) PrintUserByEmail(email string) (string, error) {
 	msg, err := u.p.SelectUserByEmail(email)
 	if err != nil {
@@ -84,4 +97,28 @@ func (u *Usecase) NonUserExistence(newUser newuser.User) (bool, error) {
 		return true, nil
 	}
 	return false, nil
+}
+
+func (u *Usecase) UpdateSesionNow(id int) error {
+	err := u.p.UpdateSesion(id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *Usecase) GetSesionNow() (int, error) {
+	num, err := u.p.SelectSesion()
+	if err != nil {
+		return 0, err
+	}
+	return num, nil
+}
+
+func (u *Usecase) UpdateUserById(name string, id int) error {
+	err := u.p.UpdateUserById(name, id)
+	if err != nil {
+		return err
+	}
+	return nil
 }

@@ -148,3 +148,7 @@ function search_cards() {
         }
     }
 }
+
+document.getElementById('profile').addEventListener('click', function(event) {
+    window.location.href = 'profile.html';
+})

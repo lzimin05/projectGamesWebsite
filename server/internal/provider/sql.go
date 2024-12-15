@@ -20,6 +20,18 @@ func (p *Provider) SelectUserById(id int) (string, error) {
 	return msg, nil
 }
 
+func (p *Provider) SelectEmailById(id int) (string, error) {
+	var email string
+	err := p.conn.QueryRow("SELECT email FROM users WHERE users.id = ($1)", id).Scan(&email)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return "", nil
+		}
+		return "", err
+	}
+	return email, nil
+}
+
 func (p *Provider) GetPasswordByEmail(email string) (string, error) {
 	var msg string
 	err := p.conn.QueryRow("SELECT password FROM users WHERE users.email = ($1)", email).Scan(&msg)
@@ -53,7 +65,14 @@ func (p *Provider) InsertUser(newUser newuser.User) error {
 	return nil
 }
 
-// надо прололжить!	
+func (p *Provider) UpdateUserById(name string, id int) error {
+	_, err := p.conn.Exec("UPDATE users SET name  = ($1) WHERE id = ($2)", name, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (p *Provider) GetSesion(id int) error {
 	_, err := p.conn.Exec("UPDATE sesion SET id_user = ($1)", id)
 	if err != nil {
@@ -72,6 +91,30 @@ func (p *Provider) GetIdByemail(email string) (int, error) {
 		return 0, err
 	}
 	number, err := strconv.Atoi(msg)
+	if err != nil {
+		return 0, nil
+	}
+	return number, nil
+}
+
+func (p *Provider) UpdateSesion(id int) error {
+	_, err := p.conn.Exec(`UPDATE sesion SET id_user = ($1)`, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *Provider) SelectSesion() (int, error) {
+	var id string
+	err := p.conn.QueryRow("SELECT id_user FROM sesion LIMIT 1").Scan(&id)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return 0, nil
+		}
+		return 0, err
+	}
+	number, err := strconv.Atoi(id)
 	if err != nil {
 		return 0, nil
 	}
