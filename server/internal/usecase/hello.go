@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"fmt"
 	"log"
 
 	newuser "github.com/lzimin05/IDZ/internal/user"
@@ -8,6 +9,19 @@ import (
 
 func (u *Usecase) PrintUserById(id int) (string, error) {
 	msg, err := u.p.SelectUserById(id)
+	if err != nil {
+		return "", err
+	}
+
+	if msg == "" {
+		return u.defaultMsg, nil
+	}
+
+	return msg, nil
+}
+
+func (u *Usecase) PrintEmailById(id int) (string, error) {
+	msg, err := u.p.SelectEmailById(id)
 	if err != nil {
 		return "", err
 	}
@@ -30,6 +44,31 @@ func (u *Usecase) PrintUserByEmail(email string) (string, error) {
 	}
 
 	return msg, nil
+}
+
+func (u *Usecase) GetPasswordByEmail(email string) (string, error) {
+	msg, err := u.p.GetPasswordByEmail(email)
+	if err != nil {
+		return "", err
+	}
+
+	if msg == "" {
+		return "", nil
+	}
+
+	return msg, nil
+}
+
+func (u *Usecase) GetIdByemail(email string) (int, error) {
+	num, err := u.p.GetIdByemail(email)
+	if err != nil {
+		return 0, err
+	}
+	if num == 0 {
+		fmt.Println("Нет Id")
+		return 0, nil
+	}
+	return num, nil
 }
 
 func (u *Usecase) InsertNewUser(newUser newuser.User) error {
@@ -60,22 +99,26 @@ func (u *Usecase) NonUserExistence(newUser newuser.User) (bool, error) {
 	return false, nil
 }
 
-/*
-func (u *Usecase) SetHelloMessage(msg string) error {
-	isExist, err := u.p.CheckHelloExitByMsg(msg)
+func (u *Usecase) UpdateSesionNow(id int) error {
+	err := u.p.UpdateSesion(id)
 	if err != nil {
 		return err
 	}
-
-	if isExist {
-		return nil
-	}
-
-	err = u.p.InsertHello(msg)
-	if err != nil {
-		return err
-	}
-
 	return nil
 }
-*/
+
+func (u *Usecase) GetSesionNow() (int, error) {
+	num, err := u.p.SelectSesion()
+	if err != nil {
+		return 0, err
+	}
+	return num, nil
+}
+
+func (u *Usecase) UpdateUserById(name string, id int) error {
+	err := u.p.UpdateUserById(name, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

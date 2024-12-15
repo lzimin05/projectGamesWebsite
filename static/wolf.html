@@ -5,19 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="image/icon2.png" type="image/x-png">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="game/snake/css/style.css">
+    <link rel="stylesheet" href="game/wolf/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Sixtyfour+Convergence&display=swap" rel="stylesheet">
         
-    <title>Змейка</title>
+    <title>Ну, погоди!</title>
 </head>
-<body>
+<body class="light_mode">
     <header>
         <!--Левые кнопки меню-->
         <div class="left_menu">
             <button onclick="document.location='main.html'" class="menu">Все игры</button>
-            <button class="menu">Рекорды</button>
+            <button class="menu button_hide">Рекорды</button>
         </div>
         <div class="center_menu button_hide">
             <img class="img_center_menu"src="image/search.png">
@@ -26,18 +26,24 @@
             <button id="search_button" class="center_menu_search_button button_hide">Поиск</button>
         </div>
         <div class="dark_mode_div">
-            <button class="menu">Профиль</button>
+            <button class="menu button_hide">Профиль</button>
             <button id="dark_mode_button" class="dark_mode_button"><img class="img_dark_mode" src="image/theme.png" alt="change_theme"></button>
         </div>
     </header>
     <section class="just_game">
-        <canvas id="game" width="608" height="607"></canvas>
-    </section>
-    <section class="game_try_again">
-        <label class="score"></label>
-        <button class="retry button_hide">Retry</button>
+        <div id="world"></div>
+        <div id="gameoverInstructions">Game Over</div>
+        <div id="dist">
+            <div class="label">distance</div>
+            <div id="distValue">000</div>
+        </div>
+        <div id="instructions">Space to jump<span class="lightInstructions"> — Grab the carrots / avoid the hedgehogs</span></div>
+        <div id="credits">
+            <p><a href="https://codepen.io/Yakudoo/" target="blank">other codepens</a> | <a href="https://www.epic.net" target="blank">epic.net</a></p>
+        </div>
     </section>
     <script src="js/main.js"></script>
-    <script src="game/snake/js/snake.js"></script>
-</body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
+    <script src="game/wolf/js/wolf.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
 </html>
